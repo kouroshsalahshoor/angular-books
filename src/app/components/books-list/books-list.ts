@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../../models/book';
 import { BooksService } from '../../services/books-service';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-books-list',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './books-list.html',
   styleUrl: './books-list.css',
 })
