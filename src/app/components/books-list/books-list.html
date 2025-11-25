@@ -8,7 +8,7 @@
         <th scope="col" style="width: 15%">Title</th>
         <th scope="col" style="width: 15%">Author</th>
         <th scope="col" style="width: 15%">Published Date</th>
-        <th scope="col" style="width: 10%">
+        <th scope="col" style="width: 10%" class="text-end">
           <a class="btn btn-primary">
             <i class="fa-regular fa-square-plus"></i>
             Add
@@ -22,16 +22,16 @@
         <th scope="row">{{ item.id }}</th>
         <td>{{ item.title }}</td>
         <td>{{ item.author }}</td>
-        <td>{{ item.publishedDate }}</td>
-        <td></td>
+        <td>{{ item.publishedDate | date : 'yyyy-MM-dd' }}</td>
+        <td class="text-end"></td>
       </tr>
       }
     </tbody>
-    <tfoot>
+    <!-- <tfoot>
       table foot
     </tfoot>
     <caption>
       List of books
-    </caption>
+    </caption> -->
   </table>
 </div>
