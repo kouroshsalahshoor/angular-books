@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BooksService } from '../../services/books-service';
+import { mapFrom, mapToView } from '../../utils/book-mapper';
 
 @Component({
   selector: 'app-book-form',
@@ -20,14 +21,18 @@ export class BookForm implements OnInit {
     private service: BooksService,
     private activatedRoute: ActivatedRoute
   ) {
+    const strNowDate = new Date().toISOString().split('T')[0];
+
     this.form = this.fb.group({
+      id: [0],
       title: ['', Validators.required],
       author: ['', Validators.required],
-      publishedDate: [new Date(), Validators.required],
+      publishedDate: [strNowDate, Validators.required],
     });
   }
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
+
     if (id) {
       this.id = +id;
       this.load(this.id);
@@ -37,13 +42,8 @@ export class BookForm implements OnInit {
   load(id: number): void {
     this.service.getById(id).subscribe({
       next: (data) => {
-        this.form.patchValue({
-          id: data.id,
-          title: data.title,
-          author: data.author,
-          publishedDate: data.publishedDate,
-          // publishedDate: data.publishedDate.toISOString().split('T')[0],
-        });
+        console.log(data);
+        this.form.patchValue(mapToView(data));
       },
       error: (error) => {
         console.log('error load', error);
@@ -53,12 +53,12 @@ export class BookForm implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      const model = this.form.value;
+      const model = mapFrom(this.form.value);
       console.log(model);
 
       if (this.id) {
         this.service.update(this.id, model).subscribe({
-          next: (data) => {
+          next: (response) => {
             this.router.navigate(['/books']);
           },
           error: (error) => {
@@ -67,7 +67,7 @@ export class BookForm implements OnInit {
         });
       } else {
         this.service.create(model).subscribe({
-          next: (data) => {
+          next: (response) => {
             this.router.navigate(['/books']);
           },
           error: (error) => {

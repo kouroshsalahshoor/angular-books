@@ -17,14 +17,14 @@
       </tr>
     </thead>
     <tbody>
-      @for (item of items; track $index) {
+      @for (item of items$ | async; track item.id) {
       <tr>
         <th scope="row">{{ item.id }}</th>
         <td>{{ item.title }}</td>
         <td>{{ item.author }}</td>
         <td>{{ item.publishedDate | date : 'yyyy-MM-dd' }}</td>
         <td class="d-flex gap-3 justify-content-end">
-          <a class="btn btn-warning" routerLink="/book/edit/{{ item.id }}">
+          <a class="btn btn-warning text-white" routerLink="/book/edit/{{ item.id }}">
             <i class="fa-solid fa-pencil"></i>
             Edit
           </a>
@@ -33,6 +33,10 @@
             Delete
           </button>
         </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="5"><p class="text-center fw-bold">No items available</p></td>
       </tr>
       }
     </tbody>
